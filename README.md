@@ -1,32 +1,35 @@
-# lid-awake – Zavřené víko
+# lid-awake
 
-*Manual GNOME toggle that keeps a laptop running with the lid closed (Czech UI).*
+A manual toggle for GNOME that keeps your laptop running with the lid closed
+(downloads, builds, music, servers…). It only turns on **when you switch it on**,
+and it's off again after a reboot or logout.
 
-Ruční přepínač pro GNOME: notebook se zavřeným víkem běží dál (stahování, buildy,
-hudba, servery…). Zapíná se **jen ručně** a po restartu nebo odhlášení je zase vypnutý.
+> The user interface is in Czech. The quick settings tile is called **„Zavřené víko“**
+> ("Lid closed").
 
-## Co umí
+## Features
 
-- dlaždice **„Zavřené víko“** v rychlém nastavení (vpravo nahoře) a ikonka v liště, když je zapnuto
-- klávesová zkratka **AltGr + mezerník**
-- bublina dole na obrazovce (OSD) při každém přepnutí
-- příkaz `lid-awake on | off | toggle | status`
+- a **„Zavřené víko“** tile in Quick Settings (top right), plus a panel icon while it's on
+- keyboard shortcut **AltGr + Space**
+- an on-screen bubble (OSD) at the bottom of the screen on every toggle
+- a `lid-awake on | off | toggle | status` command
 
-## Co přesně dělá, když je zapnuto
+## What it does while on
 
-- zavření víka notebook neuspí (`systemd-inhibit --what=handle-lid-switch`), obrazovka se jen zamkne
-- neuspí se ani po nečinnosti (`gnome-session-inhibit --inhibit suspend`)
-- ruční uspání z menu funguje dál
+- closing the lid doesn't suspend the laptop (`systemd-inhibit --what=handle-lid-switch`); the screen just locks
+- it doesn't suspend after inactivity either (`gnome-session-inhibit --inhibit suspend`)
+- manual suspend from the system menu still works
 
-Nemění žádná systémová nastavení a nepotřebuje `sudo`. Celé je to jen zámek, který drží
-uživatelská služba `lid-awake.service`. Po jejím zastavení se systém chová přesně jako předtím.
+It changes no system settings and needs no `sudo`. Everything is just an inhibitor lock
+held by the user service `lid-awake.service`. Once the service stops, the system behaves
+exactly as before.
 
-## Požadavky
+## Requirements
 
-- GNOME Shell 48 (vyzkoušeno na Debianu 13, Wayland)
-- systemd, `gnome-session-inhibit` (balík `gnome-session-bin`), `gjs`
+- GNOME Shell 48 (tested on Debian 13, Wayland)
+- systemd, `gnome-session-inhibit` (package `gnome-session-bin`), `gjs`
 
-## Instalace
+## Installation
 
 ```sh
 git clone https://github.com/knespii/lid-awake.git
@@ -34,35 +37,36 @@ cd lid-awake
 sh install.sh
 ```
 
-Pak se odhlas a znovu přihlas. Na Waylandu GNOME nové rozšíření jinak nenačte.
-Příkaz `lid-awake` a zkratka fungují hned.
+Then log out and back in. On Wayland, GNOME won't load a new extension otherwise.
+The `lid-awake` command and the shortcut work right away.
 
-## Klávesová zkratka
+## Keyboard shortcut
 
-AltGr + mezerník je v GNOME `<Mod5>space`. Funguje na rozloženích, kde je AltGr klávesa
-Level3 (cz, sk, de…). Na americkém rozložení je AltGr obyčejný pravý Alt. Tam si zkratku
-změň v *Nastavení → Klávesnice → Klávesové zkratky → Vlastní zkratky*.
+In GNOME, AltGr + Space is `<Mod5>space`. It works on layouts where AltGr is the Level3
+key (cz, sk, de…). On the US layout AltGr is just the right Alt key, so pick another
+shortcut in *Settings → Keyboard → Keyboard Shortcuts → Custom Shortcuts*.
 
-## Odinstalace
+## Uninstall
 
 ```sh
 sh uninstall.sh
 ```
 
-## Jak je to poskládané
+## How it fits together
 
-| Soubor | Co dělá |
+| File | What it does |
 |---|---|
-| `lid-awake.service` | uživatelská služba, která drží zámky; nemá `[Install]`, takže se nikdy nespustí sama |
-| `lid-awake` | příkaz pro terminál a zkratku |
-| `lid-awake@local/` | rozšíření GNOME: spouští a zastavuje službu přes D-Bus systemd a sleduje její stav |
+| `lid-awake.service` | user service that holds the locks; it has no `[Install]` section, so it never starts on its own |
+| `lid-awake` | command for the terminal and the shortcut |
+| `lid-awake@local/` | GNOME extension: starts and stops the service over systemd's D-Bus API and tracks its state |
 
-Při zamčení obrazovky (třeba po zavření víka) GNOME rozšíření vypne, služba ale běží dál.
+When the screen locks (for example after closing the lid), GNOME disables the extension,
+but the service keeps running.
 
-## Pozor
+## Caution
 
-Zapnutý notebook v batohu se může přehřát a vybít.
+A running laptop in a bag can overheat and drain its battery.
 
-## Licence
+## License
 
 [MIT](LICENSE)
