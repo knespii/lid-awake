@@ -1,0 +1,8 @@
+{
+  "uuid": "lid-awake@local",
+  "name": "Zavřené víko",
+  "description": "Přepínač v rychlém nastavení: notebook se zavřeným víkem běží dál. Ovládá službu lid-awake.service.",
+  "shell-version": ["48"],
+  "url": "https://github.com/knespii/lid-awake",
+  "version": 1
+}

@@ -1,0 +1,9 @@
+[Unit]
+Description=Notebook běží dál i se zavřeným víkem (lid-awake)
+
+# Záměrně bez [Install]: služba se nikdy nespustí sama, jen ručně
+# (přepínač v rychlém nastavení GNOME nebo příkaz `lid-awake on`).
+[Service]
+# systemd-inhibit: logind při zavření víka notebook neuspí.
+# gnome-session-inhibit: GNOME ho neuspí ani po nečinnosti (jen zamkne obrazovku).
+ExecStart=/usr/bin/systemd-inhibit --what=handle-lid-switch --mode=block --who=lid-awake "--why=Zavřené víko notebook neuspí" /usr/bin/gnome-session-inhibit --app-id lid-awake --reason "Zavřené víko notebook neuspí" --inhibit suspend --inhibit-only
